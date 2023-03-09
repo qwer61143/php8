@@ -10,7 +10,7 @@
             <br>
             <input type="password" placeholder="請輸入密碼" name="u_password" value="<?php if(!empty($_COOKIE['u_password'])) echo $_COOKIE['u_password'] ?>">
             <br>
-            <input type="checkbox" name="rememberme" value="true" checked>
+            <input type="checkbox" name="rememberme" value="true" checked>remember?
             <input type="submit" value="送出">
         </form>
             <div><a href="forgetpassword.php">忘記密碼</a></div>
