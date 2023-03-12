@@ -1,45 +1,38 @@
 <?php
+    session_start();
     require_once("../method/connet.php");
 
-    function data_in($data){
-        $data = trim($data);
-        $data = stripcslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-    }
-    $good_name = $good_pic = $good_price = $good_info = $good_total = "";
-    $priceErr = $totalErr = "";
-
-    if($_SERVER['REQUEST_METHOD'] == "POST") {
-
-        if(empty($_POST['good_name'])){
-            echo "請輸入商品名稱";
-        }else {
-            $good_name = data_in($_POST['good_name']);
-        }
-
-        if(empty($_POST['good_price'])){
-            echo "請輸入商品價格";
-        }else {
-            $good_price = data_in($_POST["good_price"]);
-            if(!preg_match("/^[0-9]*$/", $good_price)){
-                $priceErr = "請輸入正確價格";
-        }
-        if(empty($_POST['good_total'])){
-            echo "請輸入商品數量";
-        }else {
-            $good_total = data_in($_POST['good_total']);
-            if(!preg_match("/^[0-9]*$/", $_POST['good_total'])){
-                $totalErr = "只能輸入數字";
-            }
-        if(!empty($_POST['good_info'])){
-            $good_info = data_in($_POST['good_info']);
-        }
-        }
-
-        $insert = $conn -> prepare("INSERT INTO `goods`(good_name, good_pic, good_price, good_total, good_info, good_uptime) VALUES (?,?,?,?,?,NOW())");
-        $insert -> execute(array($good_name, $good_pic, $good_price, $good_total, $good_info));
-    }
+    if(!isset($_SESSION['u_name'])){
+        header("Location:../user/user_login.php");
+        exit();
     }
 
+    $query =  $conn -> prepare("SELECT * FROM `seller` WHERE seller_id = :seller_id");
+    $query -> bindParam(':seller_id', $_SESSION['u_id'], PDO::PARAM_INT);
+    $query -> execute();
+
+    if(!$query -> fetch(PDO::FETCH_ASSOC)){
+        header("Location :../user/user_center.php");
+        exit();
+    }
 ?>
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="utf8">
+        <title>商品上傳</title>
+    </head>
+    <body>
+        <form action="upload.php" method="POST" enctype="multipart/form-data">
+            <div>商品名稱<input type="text" name="good_name" value="<?php if(isset($_GET['nameErr'])){ echo $_GET['nameErr'];}?>"></div>
+            <div>商品圖片<input type="file" name="good_pic"></div>
+            <div>售價<input type="price" name="good_price" value="<?php if(isset($_GET['priceErr'])){ echo $_GET['priceErr'];}?>"></div>
+            <div>商品數量<input type="number" name="good_total" value="<?php if(isset($_GET['totalErr'])){ echo $_GET['totalErr'];}?>"></div>
+            <div>商品資訊<textarea name="good_info" row="5" cols="20"></textarea></div>
+            <input type="hidden" name="good_seller" value="<?php echo $_SESSION['u_id']?>">
+            <input type="submit" value="上傳">
+        </form>
+    </body>
+</html>
+
+

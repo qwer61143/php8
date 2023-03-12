@@ -13,5 +13,8 @@
         exit;
     }
 ?>
+<div><a href = "../goods/good_upload.php">good_upload</a></div>
 <div><a href = "user_update.php">update</a></div>
 <div><a href = "?logout=true">logout</a></div>
+<div><a href = "../seller/join_seller.php">be seller</a></div>
+<div><a href="../seller/seller_center.php">seller center</a></div>

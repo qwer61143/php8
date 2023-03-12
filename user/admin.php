@@ -30,9 +30,8 @@
     
     $query = $conn -> prepare("SELECT * FROM `userdata` WHERE u_level = 'member' ORDER BY u_jointime DESC");
     $query_limit =  $conn -> prepare("SELECT * FROM `userdata` WHERE u_level = 'member' ORDER BY u_jointime DESC LIMIT {$start_records}, {$page_records}");
-    $query_limit -> execute();
     $query -> execute();
-    $unlimit_result = $query -> fetchAll(PDO::FETCH_ASSOC);
+    $query_limit -> execute();
 
     $total_records = $query -> rowCount();
     $total_pages = ceil($total_records/$page_records);
@@ -69,7 +68,7 @@
         echo "資料筆數:".$total_records;
     ?>
         <?php if($num_pages>1) { ?>
-            <a href="?page=1">1</a> | <a href="?page=<?php echo $num_pages-1 ?>">previous page</a> 
+            <a href="?page=1">first page</a> | <a href="?page=<?php echo $num_pages-1 ?>">previous page</a> 
         <?php } ?>
         <?php if($num_pages<$total_pages) {?>
             <a href="?page=<?php echo $num_pages +1 ?>">next page</a> | <a href="?page=<?php echo $total_pages?>">last page</a>
