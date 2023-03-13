@@ -14,5 +14,6 @@
             <input type="submit" value="送出">
         </form>
             <div><a href="forgetpassword.php">忘記密碼</a></div>
+            <div><a href="user_register.php">用戶註冊</a></div>
     </body>
 </html>

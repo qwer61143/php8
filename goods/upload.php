@@ -85,10 +85,10 @@
         }
         $seller_id = $_POST['good_seller'];
 
-        $insert = $conn -> prepare("INSERT INTO `goods`(good_name, good_pic, good_price, good_total, good_info, good_uptime) VALUES (?, ?, ?, ?, ?, NOW())");
-        $insert -> execute(array($good_name, $good_pic, $good_price, $good_total, $good_info));
+        $insert = $conn -> prepare("INSERT INTO `goods`(good_name, good_pic, good_price, good_total, good_info, good_uptime, good_seller) VALUES (?, ?, ?, ?, ?, NOW(), ?)");
+        $insert -> execute(array($good_name, $good_pic, $good_price, $good_total, $good_info, $seller_id));
         $good_id = $conn -> lastInsertId();
-        
+
         $update = $conn -> prepare("UPDATE `seller` SET goods = CONCAT(goods, ',', :good_id) WHERE seller_id = :seller_id");
         $update -> bindParam(':good_id', $good_id, PDO::PARAM_INT);
         $update -> bindParam(':seller_id', $seller_id ,PDO::PARAM_INT);

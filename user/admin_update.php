@@ -21,9 +21,11 @@
     }
     if(isset($_SESSION['u_level']) && ($_SESSION['u_level'] == "member")){
         header("Location: user_center.php");
+        exit;
     }
     
     if(isset($_POST['action']) && ($_POST['action'] == "update")){
+
         $update = $conn -> prepare("UPDATE `userdata` SET u_name= ?, u_password= ?, u_cname= ?, u_sex= ?, u_birthday= ?, u_phone= ?, u_email= ?, u_adress= ? WHERE u_id =?");
         $u_name = data_in($_POST['u_name']);
         $u_password =data_in($_POST['u_password']);
@@ -37,13 +39,17 @@
         if(($_POST['u_newpassword']!="") && ($_POST['u_newpassword'] == $_POST['u_passwordcheck'])){
             $u_password = password_hash($_POST['u_newpassword'], PASSWORD_BCRYPT);
         }
+
         $update -> execute(array($u_name,$u_password,$u_cname,$u_sex,$u_birthday,$u_phone,$u_email,$u_adress,$u_id));
         header("Location: admin.php");
+        exit;
     }
+
     $select = $conn -> prepare("SELECT * FROM `userdata` WHERE u_id = ?");
     $select -> execute(array($_GET['id']));
     $result = $select -> fetch(PDO::FETCH_ASSOC);
 ?>
+
 <html lang="zh-TW">
     <head>
         <meta charset="utf8">

@@ -1,4 +1,4 @@
-<?
+<?php
     session_start();
     require_once("../method/connet.php");
 
@@ -7,7 +7,7 @@
     $query -> execute();
 
     if(!$query -> fetch(PDO::FETCH_ASSOC)){
-        header("Location :../user/user_center.php");
+        header("Location:../user/user_center.php");
         exit();
     }
 ?>
@@ -18,7 +18,10 @@
     </head>
     <body>
         <div>
-            <a href="seller_good_list.php">您的產品列表</a>
+            <a href = "../goods/good_upload.php">good_upload</a>
+        </div>
+        <div>
+            <a href = "seller_good_list.php">您的產品列表</a>
         </div>
     </body>
 </html>
