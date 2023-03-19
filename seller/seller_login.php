@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>會員登入</title>
+        <title>賣家登入</title>
         <link rel="stylesheet" type="text/css" href="../css/css.css">
     </head>
     <body>
@@ -20,7 +20,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link" href="user_login.php">用戶登入</a>
+                                <a class="nav-link" href="seller_login.php">賣家登入</a>
                             </li>
                         </ul>
                         <ul class="navbar-nav ml-auto">
@@ -40,10 +40,10 @@
                 </div>
             </nav>
             <div class="d-flex flex-column justify-content-center align-items-center text-center my-5">
-                <img src="../imgs/user.png" alt="">
+                <img src="../imgs/seller.img" alt="">
                 <form method="POST" action="login_check.php">
-                    <input class="form-control my-3" type="text" placeholder="請輸入手機號碼" name="u_phone" value="<?php if (!empty($_COOKIE['u_phone'])) echo $_COOKIE['u_phone'] ?>">
-                    <input class="form-control my-3" type="password" placeholder="請輸入密碼" name="u_password" value="<?php if (!empty($_COOKIE['u_password'])) echo $_COOKIE['u_password'] ?>">
+                    <input class="form-control my-3" type="text" placeholder="請輸入商店帳號" name="seller_name">
+                    <input class="form-control my-3" type="password" placeholder="請輸入密碼" name="seller_password">
                     <div class="form-check mb-3">
                         <input type="checkbox" class="form-check-input" id="rememberme" name="rememberme" value="true" checked>
                         <label class="form-check-label" for="rememberme">Remember me?</label>
@@ -51,7 +51,7 @@
                     <button type="submit" class="btn btn-primary">送出</button>
                 </form>
                 <div class="mt-3"><a href="forgetpassword.php">忘記密碼</a></div>
-                <div><a href="user_register.php">用戶註冊</a></div>
+                <div><a href="join_seller.php">成為賣家</a></div>
             </div>
     </body>
 </html>

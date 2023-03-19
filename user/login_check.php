@@ -1,5 +1,6 @@
 <?php 
     require_once("../method/connet.php");
+    //ob_start();
     session_start();
 
     if(isset($_SESSION['u_name']) && $_SESSION['u_name']!=""){
@@ -45,16 +46,16 @@
                     }
                 }
 
-                echo "登入成功";
                 if($_SESSION['u_level'] == "admin"){
                     header("Location: admin.php");
                 }else {
                     header("Location: user_center.php");
                 }
-                
+            
             }else {
                 echo "密碼錯誤";
             }
         }
+    //ob_end_flush();
     }
 ?>

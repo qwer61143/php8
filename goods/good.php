@@ -1,6 +1,7 @@
 <?php
     error_reporting(E_ALL);
     ini_set('display_errors', '1');
+    
     require_once("../method/class.Cart.php");
     require_once("../method/connet.php");
     

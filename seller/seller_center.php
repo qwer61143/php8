@@ -2,7 +2,7 @@
     session_start();
     require_once("../method/connet.php");
 
-    $query =  $conn -> prepare("SELECT * FROM `seller` WHERE seller_id = :seller_id");
+    $query = $conn -> prepare("SELECT * FROM `seller` WHERE seller_id = :seller_id");
     $query -> bindParam(':seller_id', $_SESSION['u_id'], PDO::PARAM_INT);
     $query -> execute();
 

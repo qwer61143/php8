@@ -2,17 +2,17 @@
     session_start();
     require_once("../method/connet.php");
 
-    if(!isset($_SESSION['u_name'])){
-        header("Location:../user/user_login.php");
+    if(!isset($_SESSION['seller_id'])){
+        header("Location:seller_login.php");
         exit();
     }
 
     $query =  $conn -> prepare("SELECT * FROM `seller` WHERE seller_id = :seller_id");
-    $query -> bindParam(':seller_id', $_SESSION['u_id'], PDO::PARAM_INT);
+    $query -> bindParam(':seller_id', $_SESSION['seller_id'], PDO::PARAM_INT);
     $query -> execute();
 
     if(!$query -> fetch(PDO::FETCH_ASSOC)){
-        header("Location :../user/user_center.php");
+        header("Location :join_seller.php");
         exit();
     }
 ?>
@@ -29,7 +29,7 @@
             <div>售價<input type="text" name="good_price" value="<?php if(isset($_GET['priceErr'])){ echo $_GET['priceErr'];}?>"></div>
             <div>商品數量<input type="number" name="good_total" value="<?php if(isset($_GET['totalErr'])){ echo $_GET['totalErr'];}?>"></div>
             <div>商品資訊<textarea name="good_info" row="5" cols="20"></textarea></div>
-            <input type="hidden" name="good_seller" value="<?php echo $_SESSION['u_id']?>">
+            <input type="hidden" name="good_seller" value="<?php echo $_SESSION['seller_id']?>">
             <input type="submit" value="上傳">
         </form>
     </body>
