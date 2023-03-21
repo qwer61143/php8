@@ -77,6 +77,11 @@
                 font-size: 20px;
                 padding: 20px;
             }
+            .custom-img {
+                width: 100%; /* 設定圖片寬度為 100% */
+                height: 175px; /* 設定圖片高度為 200px */
+                object-fit: cover; /* 使圖片保持比例填充區域 */
+            }
         </style>
         <title>首頁</title>
     </head>
@@ -175,7 +180,7 @@
                     <div class="col">
                         <div class="card">
                             <a href="goods/good.php?id=<?php echo $limit_result['good_id'] ?>">
-                            <img src="<?php echo $limit_result['good_pic'] ?>" class="card-img-top" alt="...">
+                            <img src="<?php echo $limit_result['good_pic'] ?>" class="card-img-top custom-img" alt="...">
                             </a>
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo $limit_result['good_name']?></h5>

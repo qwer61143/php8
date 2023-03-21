@@ -62,12 +62,26 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../css/css.css" type="text/css">
         <style>
-        .centered-form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+            .centered-form {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+            .error {
+                font-size: 12px;
+                color: red;
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                display: none;
+            }
+            .custom-img-size {
+                max-width: 25% ;
+                height: auto;
+                margin: 0 auto;
+            }
         </style>
         <title>會員註冊系統</title>
     </head>
@@ -101,25 +115,46 @@
             </div>
         </nav>
 
-        <div class="centered-form">
+        <div class="centered-form justify-content-center align-items-center text-center my-5">
             <form class="w-50" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>">
-                <div class="form-group">
-                    <label for="input1">請輸入手機號碼</label>
-                    <input type="text" class="form-control" id="input1" name="u_phone"><?php echo $u_phoneErr?>
+                <img src="../imgs/register.png" alt="" class="custom-img-size mb-5">
+                <div class="form-group position-relative" >
+                    <div>
+                        <label for="u_phone">請輸入手機號碼</label>
+                        <input type="text" class="form-control" id="u_phone" name="u_phone" oninput = "validatePhone()"><?php echo $u_phoneErr?>
+                    </div>
+                    <div class="col-auto">
+                        <span class="error mt-2" id="phone_error" style="display:none">請輸入正確的號碼!</span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="input2">請輸入電子郵件地址</label>
-                    <input type="text" class="form-control" id="input2" name="u_email"><?php echo $u_emailErr?>
+                <div class="form-group  position-relative">
+                    <div>
+                        <label for="u_email">請輸入電子郵件地址</label>
+                        <input type="text" class="form-control" id="u_email" name="u_email" oninput = "validateEmail()"><?php echo $u_emailErr?>
+                    </div>
+                    <div class="col-auto">
+                        <span class="error mt-2" id="email_error" style="display:none">請輸入正確的電子郵件!</span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="input3">請輸入使用者名稱</label>
-                    <input type="text" class="form-control" id="input3" name="u_name"><?php echo $u_nameErr?>
+                <div class="form-group  position-relative">
+                    <div>
+                        <label for="u_name">請輸入使用者名稱</label>
+                        <input type="text" class="form-control" id="u_name" name="u_name" oninput = "validateName()"><?php echo $u_nameErr?>
+                    </div>
+                    <div class="col-auto">
+                        <span class="error mt-2" id="name_error" style="display:none">使用者名稱只能有英文及數字!</span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="input4">請輸入密碼</label>
-                    <input type="text" class="form-control" id="input4" name="u_password"><?php echo $u_passwordErr?>
+                <div class="form-group  position-relative">
+                    <div>
+                        <label for="u_password">請輸入密碼</label>
+                        <input type="password" class="form-control" id="u_password" name="u_password" oninput = "validatePassword()"><?php echo $u_passwordErr?>
+                    </div>
+                    <div class="col-auto">
+                        <span class="error mt-2" id="password_error" style="display:none">密碼只能有英文及數字!</span>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">註冊</button>
+                <button type="submit" class="btn btn-primary mt-2">註冊</button>
             </form>
         </div>
 
@@ -138,5 +173,56 @@
             }
         }
         ?>
+
+        <script>
+
+            function validatePhone() {
+                const phone = document.getElementById("u_phone");
+                const phoneError = document.getElementById("phone_error");
+                const phoneRegex = /^[0-9]+$/;
+
+                if (!phoneRegex.test(phone.value)) {
+                    phoneError.style.display = "inline";
+                } else {
+                    phoneError.style.display = "none";
+                }
+            }
+
+            function validateEmail() {
+                const email = document.getElementById("u_email");
+                const emailError = document.getElementById("email_error");
+                const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+                if (!emailRegex.test(email.value)) {
+                    emailError.style.display = "inline";
+                } else {
+                    emailError.style.display = "none";
+                }
+            }
+
+            function validateName() {
+                const name = document.getElementById("u_name");
+                const nameError = document.getElementById("name_error");
+                const nameRegex = /^[\u4e00-\u9fa5a-zA-Z0-9]+$/;
+
+                if (!nameRegex.test(name.value)) {
+                    nameError.style.display = "inline";
+                } else {
+                    nameError.style.display = "none";
+                }
+            }
+
+            function validatePassword() {
+                const password = document.getElementById("u_password");
+                const passwordError = document.getElementById("password_error");
+                const passwordRegex = /^[a-zA-Z0-9]+$/;
+
+                if (!passwordRegex.test(password.value)) {
+                    passwordError.style.display = "inline";
+                } else {
+                    passwordError.style.display = "none";
+                }
+            }
+        </script>
     </body>
 </html>

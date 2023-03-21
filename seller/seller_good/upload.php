@@ -1,5 +1,5 @@
 <?php
-    require_once("../method/connet.php");
+    require_once("../../method/connet.php");
 
     function data_in($data){
         $data = trim($data);

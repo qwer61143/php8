@@ -7,8 +7,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>會員登入</title>
         <link rel="stylesheet" type="text/css" href="../css/css.css">
+        <title>會員登入</title>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3 position-relative">
@@ -48,7 +48,7 @@
                         <input type="checkbox" class="form-check-input" id="rememberme" name="rememberme" value="true" checked>
                         <label class="form-check-label" for="rememberme">Remember me?</label>
                     </div>
-                    <button type="submit" class="btn btn-primary">送出</button>
+                    <button type="submit" class="btn btn-primary mt-2">送出</button>
                 </form>
                 <div class="mt-3"><a href="forgetpassword.php">忘記密碼</a></div>
                 <div><a href="user_register.php">用戶註冊</a></div>

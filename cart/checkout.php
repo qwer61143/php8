@@ -1,4 +1,6 @@
-<?php 
+<?php
+    session_start();
+
     require_once("../method/class.Cart.php");
     require_once("../method/connet.php");
 
@@ -7,6 +9,14 @@
         'itemMaxQuantity' => 0,
         'useCookie' => false,
     ]);
+
+    if(isset($_GET['logout']) && ($_GET['logout'] == "true")){
+        unset($_SESSION['u_name']);
+        unset($_SESSION['u_level']);
+        unset($_SESSION['u_id']);
+        header("Location:user_login.php");
+        exit;
+    }
 ?>
     <?php if($cart -> getTotalitem() > 0) { ?>
         <?php

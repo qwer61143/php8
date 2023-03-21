@@ -28,10 +28,6 @@
                 $update = $conn -> prepare("UPDATE `userdata` SET u_logins = u_logins + 1, u_logintime = NOW() WHERE u_phone = ?");
                 $update -> execute(array($result['u_phone']));
                 
-                unset($_SESSION['u_name']);
-                unset($_SESSION['u_level']);
-                unset($_SESSION['u_id']);
-
                 $_SESSION["u_name"] = $result['u_name'];
                 $_SESSION["u_level"] = $result['u_level'];
                 $_SESSION['u_id'] = $result["u_id"];

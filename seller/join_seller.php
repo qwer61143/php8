@@ -84,21 +84,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../css/css.css" type="text/css">
         <style>
-        .centered-form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .error {
-            font-size: 12px;
-            color: red;
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            display: none;
-        }
+            .centered-form {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+            .error {
+                font-size: 12px;
+                color: red;
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                display: none;
+            }
         </style>
         <title>賣家註冊系統</title>
     </head>
@@ -155,10 +155,10 @@
                 <div class="form-group position-relative">
                     <div class="col">
                         <label for="seller_password">請輸入商店密碼</label>
-                        <input type="password" class="form-control" id="seller_password" name="seller_password" oninput="validateName()">
+                        <input type="password" class="form-control" id="seller_password" name="seller_password" oninput="validatePassword()">
                     </div>
                     <div class="col-auto">
-                        <span class="error mt-2" id="password_error" style="display:none">密碼只能有英文，數字，以及中文字!</span>
+                        <span class="error mt-2" id="password_error" style="display:none">密碼只能有英文，數字!</span>
                     </div>
                 </div>
                 <div class="form-group position-relative">
@@ -224,6 +224,18 @@
                 }
             }
 
+            function validatePassword() {
+                const password = document.getElementById("seller_password");
+                const passwordError = document.getElementById("password_error");
+                const passwordRegex = /^[a-zA-Z0-9]+$/;
+
+                if (!passwordRegex.test(password.value)) {
+                    passwordError.style.display = "inline";
+                } else {
+                    passwordError.style.display = "none";
+                }
+            }
+
             function validateEmail() {
                 const email = document.getElementById("seller_email");
                 const emailError = document.getElementById("email_error");
@@ -259,6 +271,7 @@
                     bankAccountError.style.display = "none";
                 }
             }
+
         </script>
 
     </body>

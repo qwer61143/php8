@@ -1,46 +1,57 @@
 <?php
     session_start();
 
-    require_once("../method/connet.php");
-    require_once("../method/bootstrap.html");
+    error_reporting(E_ALL);
+    ini_set('display_errors', '1');
 
-    if(!isset($_SESSION['seller_id']) || ($_SESSION["seller_id"] == "")){
-        header("Location:seller_login.php");
-        exit;
+    require_once("../../method/connet.php");
+    require_once("../../method/bootstrap.html");
+
+    $num_pages = 1;
+    $page_records = 12;
+
+    if(isset($_GET['page'])){
+        $num_pages = $_GET['page'];
     }
 
-    $query = $conn -> prepare("SELECT * FROM `seller` WHERE seller_id = :seller_id");
+    $start_records = ($num_pages - 1) * $page_records ;
+    
+    $query = $conn -> prepare("SELECT * FROM `goods` WHERE good_seller = :seller_id");
     $query -> bindParam(':seller_id', $_SESSION['seller_id'], PDO::PARAM_INT);
     $query -> execute();
+    $result = $query -> fetchAll(PDO::FETCH_ASSOC);
 
-    if(!$query -> fetch(PDO::FETCH_ASSOC)){
-        header("Location:join_seller.php");
-        exit();
-    }
+    $total_records = count($result);
+    $total_pages = ceil($total_records / $page_records);
+
+    $query_str = $query -> queryString." LIMIT {$start_records}, {$page_records}";
+    $query_limit = $conn -> prepare($query_str);
+    $query_limit -> bindParam(':seller_id', $_SESSION['seller_id'], PDO::PARAM_INT);
+    $query_limit -> execute();
 
     if(isset($_GET['logout']) && ($_GET['logout'] == "true")){
         unset($_SESSION['seller_name']);
         unset($_SESSION['seller_id']);
-        header("Location:seller_login.php");
+        header("Location:../../index.php");
         exit;
     }
 ?>
-
-<!DOCTYPE html>
-<html lang="zh-TW">
+<html>
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/css.css" type="text/css">
-        <style>
-            .custom-img-size {
-                max-width: 50%;
-                margin: 0 auto;
-            }
-        </style>
-        <title>賣家中心</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>您的產品列表</title>
+    <link rel="stylesheet" href="../../css/css.css" type="text/css">
+    <style>
+    .custom-img {
+        width: 100%; /* 設定圖片寬度為 100% */
+        height: 200px; /* 設定圖片高度為 200px */
+        object-fit: cover; /* 使圖片保持比例填充區域 */
+    }
+    </style>
     </head>
     <body>
+
         <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3 position-relative">
             <div class="container-fluid">
                 <a class="navbar-brand" href="../index.php">InsideTech</a>
@@ -50,7 +61,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="../index.php">主頁</a>
+                            <a class="nav-link active" aria-current="page" href="../../index.php">主頁</a>
                         </li>
 
                         <li class="nav-item dropdown">
@@ -67,7 +78,7 @@
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link " href="../contact.php">需要幫助嗎?</a>
+                            <a class="nav-link " href="../../contact.php">需要幫助嗎?</a>
                         </li>
                        
                           <li class="nav-item dropdown">
@@ -79,7 +90,7 @@
                                     <li><a class="dropdown-item" href="?logout=true">登出</a></li>
                                 </ul>
                             <?php } else { ?>
-                                <a class="nav-link" href="seller_login.php">登入</a>
+                                <a class="nav-link" href="../seller_login.php">登入</a>
                             <?php } ?>
                         </li>
 
@@ -87,37 +98,24 @@
                 </div>
             </div>
         </nav>
-
-        <div class="row row-cols-1 row-cols-md-3 g-4 mt-5">
-        <div class="col">
-            <div class="card h-100 border-0">
-                <img src="../imgs/product.png" class="card-img-top custom-img-size img-fluid" alt="...">
-                <div class="card-body">
-                    <a href="seller_good/good_upload.php">
-                        <h5 class="card-title text-center">上傳商品</h5>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-                <div class="card h-100 border-0">
-                    <img src="../imgs/seller.png" class="card-img-top custom-img-size img-fluid" alt="...">
-                    <div class="card-body">
-                        <a href="seller_profile.php">
-                            <h5 class="card-title text-center">商家資料</h5>
-                        </a>
+        
+        <div class="container mt-5">
+            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-4">
+                <?php while($limit_result = $query_limit -> fetch(PDO::FETCH_ASSOC)) :?>
+                    <div class="col">
+                        <div class="card">
+                            <a href="good_update.php?gid=<?php echo $limit_result['good_id'] ?>">
+                            <img src="<?php echo $limit_result['good_pic'] ?>" class="card-img-top custom-img" alt="...">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo $limit_result['good_name']?></h5>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">$<?php echo $limit_result['good_price']?></small>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100 border-0">
-                    <img src="../imgs/buylist.png" class="card-img-top custom-img-size img-fluid" alt="...">
-                    <div class="card-body">
-                        <a href="seller_good/seller_good_list.php">
-                            <h5 class="card-title text-center">您的商品</h5>
-                        </a>
-                    </div>
-                </div>
+                <?php endwhile ?>
             </div>
         </div>
     </body>
