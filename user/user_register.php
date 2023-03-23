@@ -53,6 +53,20 @@
             }
         }
     }
+    
+    if($u_phone && $u_email && $u_name && $u_password != ""){
+        if(empty($u_emailErr) && empty($u_phoneErr) && empty($u_passwordErr) && empty($u_nameErr)) {
+            require_once("../method/connet.php");
+            try{
+                $insert = $conn -> prepare("INSERT INTO `userdata`(u_phone, u_email, u_name, u_password, u_jointime) VALUES (?,?,?,?,NOW())");
+                $insert -> execute(array($u_phone, $u_email, $u_name, password_hash($u_password, PASSWORD_BCRYPT)));
+                header("Location:user_center.php");
+                exit;
+            } catch(PDOException $e){
+                echo "insert FAILED". $e -> getMessage();
+            }
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -157,22 +171,6 @@
                 <button type="submit" class="btn btn-primary mt-2">註冊</button>
             </form>
         </div>
-
-        <?php
-        if($u_phone && $u_email && $u_name && $u_password != ""){
-            if(empty($u_emailErr) && empty($u_phoneErr) && empty($u_passwordErr) && empty($u_nameErr)) {
-                require_once("../method/connet.php");
-                try{
-                    $insert = $conn -> prepare("INSERT INTO `userdata`(u_phone, u_email, u_name, u_password, u_jointime) VALUES (?,?,?,?,NOW())");
-                    $insert -> execute(array($u_phone, $u_email, $u_name, password_hash($u_password, PASSWORD_BCRYPT)));
-                    header("Location:user_center.php");
-                    exit;
-                } catch(PDOException $e){
-                    echo "insert FAILED". $e -> getMessage();
-                }
-            }
-        }
-        ?>
 
         <script>
 

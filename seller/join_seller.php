@@ -74,6 +74,8 @@
         if($formValid == true){
             $insert = $conn -> prepare("INSERT INTO `seller`(seller_name, seller_phone, seller_password ,seller_email, seller_address, seller_bank_account, seller_paymethod, seller_jointime ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
             $insert -> execute(array($seller_name, $seller_phone, password_hash($seller_password, PASSWORD_BCRYPT), $seller_email, $seller_address, $seller_bank_account, $seller_paymethod));
+
+            header("Location:seller_login.php");
         }
     }
 ?>

@@ -4,32 +4,27 @@
     require_once("../method/connet.php");
     require_once("../method/bootstrap.html");
 
-    if(!isset($_SESSION['u_name']) || ($_SESSION["u_name"] == "")){
-        header("Location:user_login.php");
-        exit;
-    }
-    if(isset($_GET['logout']) && ($_GET['logout'] == "true")){
-        unset($_SESSION['u_name']);
-        unset($_SESSION['u_level']);
-        unset($_SESSION['u_id']);
-        header("Location:user_login.php");
-        exit;
-    }
+    $order_id = $_GET['oid'];
+
+    $query = $conn -> prepare("SELECT * FROM `order_item` WHERE order_id = :order_id");
+    $query -> bindParam(":order_id", $order_id, PDO::PARAM_INT);
+    $query -> execute();
+
+    $result = $query -> fetchAll();
+
 ?>
 
+
+
+
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../css/css.css" type="text/css">
-        <style>
-            .custom-img-size {
-                max-width: 50%;
-                margin: 0 auto;
-            }
-        </style>
-        <title>用戶中心</title>
+        <title>訂單編號:<?php echo $order_id ?></title>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3 position-relative">
@@ -42,10 +37,6 @@
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="../index.php">主頁</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="../seller/join_seller.php">成為賣家!</a>
                         </li>
 
                         <li class="nav-item">
@@ -68,8 +59,8 @@
                         <li class="nav-item">
                             <a class="nav-link " href="cart/cart.php">需要幫助嗎?</a>
                         </li>
-                       
-                          <li class="nav-item dropdown">
+                        
+                            <li class="nav-item dropdown">
                             <?php if (isset($_SESSION['u_name']) && $_SESSION['u_name'] != "") { ?>
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <?php echo $_SESSION['u_name']; ?>
@@ -85,38 +76,38 @@
                 </div>
             </div>
         </nav>
+        
+        <?php foreach($result as $item) { ?>
+            <?php 
+                $good_query = $conn -> prepare("SELECT good_pic FROM `goods` WHERE `good_id` = :good_id"); 
+                $good_query -> bindParam(":good_id", $item['good_id'] , PDO::PARAM_INT);
+                $good_query -> execute();
 
-        <div class="row row-cols-1 row-cols-md-3 g-4 mt-5">
-        <div class="col">
-                <div class="card h-100 border-0">
-                    <img src="../imgs/user.png" class="card-img-top custom-img-size img-fluid" alt="...">
-                    <div class="card-body">
-                        <a href="user_update.php">
-                            <h5 class="card-title text-center">個人資料</h5>
+                $good_result = $good_query -> fetch();
+            ?>
+            <div class="container border border-dark mt-5">
+                <div class="row">
+                    <div class="col-3 d-flex align-items-center">
+                        <img src="<?php echo $good_result['good_pic'] ?>" class="img-fluid" alt="Product Image">
+                    </div>
+                    <div class="col-3 d-flex align-items-center text-center">
+                        <div class="text-center" style="width: 100%;">
+                            <h5 class="card-title"><?php echo $item['item_name'] ?></h5>
+                        </div>
+                    </div>
+                    <div class="col-1 d-flex align-items-center text-center">
+                        <p class="card-text">單價: <?php echo $item['price'] ?></p>
+                    </div>
+                    <div class="col-1 d-flex align-items-center text-center">
+                        <p class="card-text">購買數量: <?php echo $item['quantity'] ?></p>
+                    </div>
+                    <div class="col-1 d-flex align-items-center text-center">
+                        <a href="../goods/good.php?id=<?php echo $item['good_id'] ?>">
+                            <p class="card-text">商品頁面</p>
                         </a>
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="card h-100 border-0">
-                    <img src="../imgs/buylist.png" class="card-img-top custom-img-size img-fluid" alt="...">
-                    <div class="card-body">
-                        <a href="../order/order_list.php">
-                            <h5 class="card-title text-center">購買清單</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100 border-0">
-                    <img src="../imgs/help.png" class="card-img-top custom-img-size img-fluid" alt="...">
-                    <div class="card-body">
-                        <a href="">
-                            <h5 class="card-title text-center">客服中心</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php } ?>
     </body>
 </html>

@@ -36,6 +36,9 @@
         $u_id = data_in($_POST['u_id']);
         $update = $conn -> prepare("UPDATE `userdata` SET u_name=?, u_cname=?, u_sex=?, u_birthday=?, u_phone=?, u_email=?, u_adress=? WHERE u_id=?");
         $update -> execute(array($u_name, $u_cname, $u_sex , $u_birthday, $u_phone, $u_email, $u_adress, $u_id));
+
+        header("Location:user_center.php");
+        exit;
     }
 ?>
 
@@ -76,8 +79,6 @@
                         <li class="nav-item">
                             <p class="nav-link">更新個人資料</p>
                         </li>
-                    </ul>
-                    <ul class="navbar-nav ml-auto">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">更改語言</a>                
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">

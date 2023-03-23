@@ -26,9 +26,10 @@
     if(isset($_POST['cartaction']) && $_POST['cartaction'] == 'add'){
         $cart -> add($_POST['id'], $_POST['quantity'],[
         'name' => $_POST['name'],
-        'price' => $_POST['price']
+        'price' => $_POST['price'],
+        'img' => $_POST['img']
         ]);
-        header("Location: ../cart/cart.php");
+        header("Location:../index.php");
         //exit;
     }
 
@@ -156,6 +157,7 @@
                                 <input type="hidden" name="id" value="<?php echo $good_id ?>">
                                 <input type="hidden" name="name" value="<?php echo $good['good_name'] ?>"> 
                                 <input type="hidden" name="price" value="<?php echo $good['good_price'] ?>">
+                                <input type="hidden" name="img" value="<?php echo $good['good_pic'] ?>">
                                 <input type="number" name="quantity">
                                 <input type="hidden" name="cartaction" value="add">
                                 <input type="submit" value="加入購物車">
@@ -167,7 +169,6 @@
             </div>
         </div>
         
-
         <div class="mt-5" style="padding-left: 12rem; padding-right: 12rem;">
             <div class="row mt-3">
                 <div class="col-md-4 d-flex align-items-center">

@@ -48,35 +48,8 @@
         header("Location:user_login.php");
         exit;
     }
+
 ?>
- 
-    <?php if($cart->getTotalItem()> 0) { ?>
-            <form action="" method="POST">
-                <?php
-                    $allItems = $cart -> getItems();
-                    foreach($allItems as $items) {
-                        foreach($items as $item) {
-                         ?>
-                            <a href="?cartaction=remove&removeid=<?php echo $item['id']; ?>">remove</a>
-                            <?php echo $item['attributes']['name']; ?> 
-                            <input type="hidden" name="updateid[]" value="<?php echo $item['id'] ?>">
-                            <input type="text" name="quantity[]" value="<?php echo $item['quantity'] ?>">
-                            <?php echo $item['attributes']['price']; ?>
-                            <?php echo "總價是" ?>
-                            <?php echo number_format($item['quantity'] * $item['attributes']['price']); ?>
-                <?php }} ?>
-                        <div>
-                            <p>總共是:<?php echo $cart -> getAttributeTotal('price') ?></p>
-                            <input type="hidden" name="cartaction" value="update">
-                            <input type="submit" name="updatebtn" value="更新購物車">
-                            <input type="button" name="clearbtn" value="清空購物車" onClick="window.location.href='?cartaction=clear'">
-                            <input type="button" name="paybtn" value="結帳" onClick="window.location.href='checkout.php'">
-                            <input type="button" name="backbtn" value="回上一頁" onClick="window.history.back();">
-                        </div>
-            </form>
-    <?php }else { ?>
-        <div>Cart is empty</div>
-    <?php } ?>
 
 <!DOCTYPE html>
 <html lang="zh-TW">
@@ -136,26 +109,69 @@
                 </div>
             </div>
         </nav>
-        
-        <div class="container">
-            <div class="row">
-                <div class="col-3">
-                    <img src="product_image.jpg" class="img-fluid" alt="Product Image">
-                </div>
-                <div class="col-3">
-                    <h5 class="card-title">Product Name</h5>
-                </div>
-                <div class="col-2">
-                    <p class="card-text">Price: $100</p>
-                </div>
-                <div class="col-2">
-                    <p class="card-text">Quantity: 1</p>
-                </div>
-                <div class="col-2">
-                    <p class="card-text">Total: $100</p>
-                </div>
-            </div>
-        </div>
+ 
+        <?php if($cart->getTotalItem()> 0) { ?>
+            <form action="" method="POST">
+                <?php
+                    $allItems = $cart -> getItems();
+                    foreach($allItems as $items) {
+                        foreach($items as $item) {
+                        ?>
+                        
+                    <div class="container border border-dark mt-5">
+                        <div class="row">
+                            <div class="col-3 d-flex align-items-center">
+                                <img src="<?php echo $item['attributes']['img'] ?>" class="img-fluid" alt="Product Image">
+                            </div>
+                            <div class="col-3 d-flex align-items-center text-center">
+                                <div class="text-center" style="width: 100%;">
+                                    <h5 class="card-title"><?php echo $item['attributes']['name']; ?></h5>
+                                </div>
+                            </div>
+                            <div class="col-1 d-flex align-items-center text-center">
+                                <p class="card-text">單價: <?php echo $item['attributes']['price']; ?></p>
+                            </div>
+                            <div class="col-2 d-flex flex-column justify-content-center align-items-center">
+                                <p class="card-text mb-0">數量:</p>
+                                <input class="form-control text-center mt-2" style="width: 50%;" type="text" name="quantity[]" value="<?php echo $item['quantity'] ?>">
+                            </div>
+                            <div class="col-1 d-flex align-items-center text-center">
+                                <p class="card-text">總價: <?php echo number_format($item['quantity'] * $item['attributes']['price']); ?></p>
+                            </div>
+                            <div class="col-2 d-flex align-items-center text-center">
+                                <button type="button" class="btn"><a href="?cartaction=remove&removeid=<?php echo $item['id']; ?>">刪除</a></button>
+                            </div>
+                            <input type="hidden" name="updateid[]" value="<?php echo $item['id'] ?>">
+                        </div>
+                    </div>
+                            
+                <?php }} ?>
+                    
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col-3 d-flex align-items-center text-center">
+                                <div class="text-center" style="width: 100%;">
+                                    <h5 class="card-title">總共是:<?php echo $cart -> getAttributeTotal('price') ?></h5>
+                                </div>
+                            </div>
+                            <div class="col-3 d-flex align-items-center text-center">
+                                <input type="hidden" name="cartaction" value="update">
+                                <input class="form-contorl" type="submit" name="updatebtn" value="更新購物車">
+                            </div>
+                            <div class="col-3 d-flex align-items-center text-center">
+                                <input class="form-contorl" type="button" name="clearbtn" value="清空購物車" onClick="window.location.href='?cartaction=clear'">
+                            </div>
+                            <div class="col-3 d-flex align-items-center text-center">
+                                <input class="form-contorl" type="button" name="paybtn" value="去結帳" onClick="window.location.href='checkout.php'">
+                            </div>
+                            <input type="hidden" name="updateid[]" value="<?php echo $item['id'] ?>">
+                        </div>
+                    </div>
+            </form>
+
+        <?php }else { ?>
+            <div>Cart is empty</div>
+        <?php } ?>
 
     </body>
 </html>
