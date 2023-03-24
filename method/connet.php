@@ -1,5 +1,5 @@
 <?php
-    $db_host = "localhost";
+    $db_host = "35.221.176.223";
     $db_username = "root";
     $db_password = "qwer61134";
     $db_name = "insidetech";
