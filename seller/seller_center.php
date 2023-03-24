@@ -8,8 +8,6 @@
     require_once("../method/bootstrap.html");
 
     if(!isset($_SESSION['seller_id']) || ($_SESSION["seller_id"] == "")){
-        echo "Redirecting to /seller/seller_login.php";
-        die();
         header("Location:/seller/seller_login.php");
         exit;
     }
