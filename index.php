@@ -99,7 +99,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="seller/seller_center.php">賣家中心</a>
+                            <a class="nav-link" href="/seller/seller_center.php">賣家中心</a>
                         </li>
 
                         <li class="nav-item">
@@ -134,7 +134,7 @@
                                     <li><a class="dropdown-item" href="?logout=true">登出</a></li>
                                 </ul>
                             <?php } else { ?>
-                                <a class="nav-link" href="user/user_login.php">登入</a>
+                                <a class="nav-link" href="/user/user_login.php">登入</a>
                             <?php } ?>
                         </li>
 
