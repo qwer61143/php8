@@ -5,7 +5,7 @@
     require_once("../method/bootstrap.html");
 
     if(!isset($_SESSION['seller_id']) || ($_SESSION["seller_id"] == "")){
-        header("Location:seller_login.php");
+        header("Location:/seller/seller_login.php");
         exit;
     }
 
