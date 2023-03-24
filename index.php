@@ -134,7 +134,7 @@
                                     <li><a class="dropdown-item" href="?logout=true">登出</a></li>
                                 </ul>
                             <?php } else { ?>
-                                <a class="nav-link" href="/user/user_login.php">登入</a>
+                                <a class="nav-link" href="https://php8-hwflcxxrfq-de.a.run.app/user/user_login.php">登入</a>
                             <?php } ?>
                         </li>
 
