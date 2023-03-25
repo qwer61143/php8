@@ -5,7 +5,6 @@
     session_start();
 
     require_once("../method/connet.php");
-    require_once("../method/bootstrap.html");
 
     if(!isset($_SESSION['seller_id']) || ($_SESSION["seller_id"] == "")){
         header("Location:/seller/seller_login.php");
@@ -27,6 +26,8 @@
         header("Location:seller_login.php");
         exit;
     }
+
+    require_once("../method/bootstrap.html");
 ?>
 
 <!DOCTYPE html>
