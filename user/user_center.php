@@ -2,7 +2,6 @@
     session_start();
 
     require_once("../method/connet.php");
-    require_once("../method/bootstrap.html");
 
     if(!isset($_SESSION['u_name']) || ($_SESSION["u_name"] == "")){
         header("Location:user_login.php");
@@ -15,6 +14,8 @@
         header("Location:user_login.php");
         exit;
     }
+
+    require_once("../method/bootstrap.html");
 ?>
 
 <!DOCTYPE html>
@@ -45,11 +46,11 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="../seller/join_seller.php">成為賣家!</a>
+                            <a class="nav-link" href="/seller/join_seller.php">成為賣家!</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="cart/cart.php">購物車</a>
+                            <a class="nav-link" href="/cart/cart.php">購物車</a>
                         </li>
 
                         <li class="nav-item dropdown">
@@ -66,7 +67,7 @@
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link " href="cart/cart.php">需要幫助嗎?</a>
+                            <a class="nav-link " href="../contact.php">需要幫助嗎?</a>
                         </li>
                        
                           <li class="nav-item dropdown">
@@ -75,10 +76,10 @@
                                     <?php echo $_SESSION['u_name']; ?>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="?logout=true">登出</a></li>
+                                    <li><a class="dropdown-item" href="../index.php?logout=true">登出</a></li>
                                 </ul>
                             <?php } else { ?>
-                                <a class="nav-link" href="user/user_login.php">登入</a>
+                                <a class="nav-link" href="/user/user_login.php">登入</a>
                             <?php } ?>
                         </li>
                     </ul>

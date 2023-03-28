@@ -2,7 +2,6 @@
     session_start();
 
     require_once("../../method/connet.php");
-    require_once("../../method/bootstrap.html");
 
     function data_in($data) {
         $data = trim($data);
@@ -68,12 +67,7 @@
         exit;
         }
     
-    if(isset($_GET['logout']) && ($_GET['logout'] == "true")){
-        unset($_SESSION['seller_name']);
-        unset($_SESSION['seller_id']);
-        header("Location:../../index.php");
-        exit;
-    }
+    require_once("../../method/bootstrap.html");
 ?>
 
 <!DOCTYPE html>
@@ -107,7 +101,7 @@
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3 position-relative">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="../index.php">InsideTech</a>
+                    <a class="navbar-brand" href="../../index.php">InsideTech</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                     </button>
@@ -115,6 +109,10 @@
                         <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="../../index.php">主頁</a>
+                            </li>
+
+                            <li class="nav-item">
+                            <a class="nav-link" href="/seller/seller_center.php">賣家中心</a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -140,10 +138,10 @@
                                     <?php echo $_SESSION['seller_name']; ?>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="?logout=true">登出</a></li>
+                                    <li><a class="dropdown-item" href="../../index.php?logout=true">登出</a></li>
                                 </ul>
                             <?php } else { ?>
-                                <a class="nav-link" href="../seller_login.php">登入</a>
+                                <a class="nav-link" href="/seller/seller_login.php">登入</a>
                             <?php } ?>
                         </li>
 

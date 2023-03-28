@@ -3,7 +3,6 @@
 
     require_once("../method/connet.php");
     require_once("../method/class.Cart.php");
-    require_once("../method/bootstrap.html");
 
     $cart = new Cart([
         'cartMaxItem' => 0,
@@ -20,7 +19,8 @@
     }
 
     $good_id = "";
-    
+
+    require_once("../method/bootstrap.html");
 ?>
 
 
@@ -46,7 +46,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="cart/cart.php">購物車</a>
+                            <a class="nav-link" href="/cart/cart.php">購物車</a>
                         </li>
 
                         <li class="nav-item dropdown">
@@ -63,7 +63,7 @@
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link " href="cart/cart.php">需要幫助嗎?</a>
+                            <a class="nav-link " href="../contact.php">需要幫助嗎?</a>
                         </li>
                     
                         <li class="nav-item dropdown">
@@ -72,10 +72,10 @@
                                     <?php echo $_SESSION['u_name']; ?>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="?logout=true">登出</a></li>
+                                    <li><a class="dropdown-item" href="../index.php?logout=true">登出</a></li>
                                 </ul>
                             <?php } else { ?>
-                                <a class="nav-link" href="user/user_login.php">登入</a>
+                                <a class="nav-link" href="/user/user_login.php">登入</a>
                             <?php } ?>
                         </li>
                     </ul>
@@ -114,7 +114,7 @@
                         
             <?php }}} ?>
 
-        <form action="cartreport.php" method="post">
+        <form class="w-50 mx-auto" action="cartreport.php" method="post">
             <div class="input-group mb-3 mt-5">
                 <span class="input-group-text" id="c_name">您的姓名</span>
                 <input type="text" class="form-control" name="c_name">
@@ -137,7 +137,7 @@
             </select>
 
             <input type="hidden" value="<?php echo $good_id ?>" name="good_id">           
-            <input type="submit" value="送出訂購單">
+            <input class="mt-3" type="submit" value="送出訂購單">
 
         </form>
 

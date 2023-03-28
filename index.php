@@ -6,7 +6,6 @@
 
     require_once("method/connet.php");
     require_once("method/class.Cart.php");
-    require_once("method/bootstrap.html");
 
     $num_pages = 1;
     $page_records = 12;
@@ -52,9 +51,14 @@
         unset($_SESSION['u_name']);
         unset($_SESSION['u_level']);
         unset($_SESSION['u_id']);
+        unset($_SESSION['seller_name']);
+        unset($_SESSION['seller_id']);
+  
         header("Location:index.php");
         exit;
     }
+
+    require_once("method/bootstrap.html");
 ?>
 
 <!DOCTYPE html>
@@ -88,7 +92,7 @@
     <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3 position-relative">
             <div class="container-fluid">
-                <a class="navbar-brand" href="../index.php">InsideTech</a>
+                <a class="navbar-brand" href="index.php">InsideTech</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -103,7 +107,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="cart/cart.php">購物車</a>
+                            <a class="nav-link" href="/cart/cart.php">購物車</a>
                         </li>
 
                         <li class="nav-item dropdown">
@@ -121,7 +125,7 @@
                     
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link " href="cart/cart.php">需要幫助嗎?</a>
+                            <a class="nav-link " href="contact.php">需要幫助嗎?</a>
                         </li>
 
                         <li class="nav-item dropdown">
@@ -130,11 +134,11 @@
                                     <?php echo $_SESSION['u_name']; ?>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="user/user_center.php">用戶中心</a></li>
+                                    <li><a class="dropdown-item" href="/user/user_center.php">用戶中心</a></li>
                                     <li><a class="dropdown-item" href="?logout=true">登出</a></li>
                                 </ul>
                             <?php } else { ?>
-                                <a class="nav-link" href="https://php8-hwflcxxrfq-de.a.run.app/user/user_login.php">登入</a>
+                                <a class="nav-link" href="/user/user_login.php">登入</a>
                             <?php } ?>
                         </li>
 
@@ -179,7 +183,7 @@
                 <?php while($limit_result = $query_limit -> fetch(PDO::FETCH_ASSOC)) :?>
                     <div class="col">
                         <div class="card">
-                            <a href="goods/good.php?id=<?php echo $limit_result['good_id'] ?>">
+                            <a href="/goods/good.php?id=<?php echo $limit_result['good_id'] ?>">
                             <img src="<?php echo $limit_result['good_pic'] ?>" class="card-img-top custom-img" alt="...">
                             </a>
                             <div class="card-body">

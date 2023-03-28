@@ -6,7 +6,6 @@
 
     require_once("../method/class.Cart.php");
     require_once("../method/connet.php");
-    require_once("../method/bootstrap.html");
 
     $cart = new Cart([
         'cartMaxItem' => 0,
@@ -41,14 +40,7 @@
         header("Location:cart.php");
     }
     
-    if(isset($_GET['logout']) && ($_GET['logout'] == "true")){
-        unset($_SESSION['u_name']);
-        unset($_SESSION['u_level']);
-        unset($_SESSION['u_id']);
-        header("Location:user_login.php");
-        exit;
-    }
-
+    require_once("../method/bootstrap.html");
 ?>
 
 <!DOCTYPE html>
@@ -73,7 +65,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="cart/cart.php">購物車</a>
+                            <a class="nav-link" href="/cart/cart.php">購物車</a>
                         </li>
 
                         <li class="nav-item dropdown">
@@ -90,7 +82,7 @@
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link " href="cart/cart.php">需要幫助嗎?</a>
+                            <a class="nav-link " href="../contact.php">需要幫助嗎?</a>
                         </li>
                        
                           <li class="nav-item dropdown">
@@ -99,10 +91,10 @@
                                     <?php echo $_SESSION['u_name']; ?>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="?logout=true">登出</a></li>
+                                    <li><a class="dropdown-item" href="../index.php?logout=true">登出</a></li>
                                 </ul>
                             <?php } else { ?>
-                                <a class="nav-link" href="user/user_login.php">登入</a>
+                                <a class="nav-link" href="/user/user_login.php">登入</a>
                             <?php } ?>
                         </li>
                     </ul>

@@ -5,7 +5,6 @@
     ini_set('display_errors', '1');
 
     require_once("../../method/connet.php");
-    require_once("../../method/bootstrap.html");
 
     $num_pages = 1;
     $page_records = 12;
@@ -29,12 +28,7 @@
     $query_limit -> bindParam(':seller_id', $_SESSION['seller_id'], PDO::PARAM_INT);
     $query_limit -> execute();
 
-    if(isset($_GET['logout']) && ($_GET['logout'] == "true")){
-        unset($_SESSION['seller_name']);
-        unset($_SESSION['seller_id']);
-        header("Location:../../index.php");
-        exit;
-    }
+    require_once("../../method/bootstrap.html");
 ?>
 <html>
     <head>
@@ -64,6 +58,10 @@
                             <a class="nav-link active" aria-current="page" href="../../index.php">主頁</a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link" href="/seller/seller_center.php">賣家中心</a>
+                        </li>
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">更改語言</a>                
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -76,6 +74,7 @@
                             </ul>
                         </li>
                     </ul>
+                    
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
                             <a class="nav-link " href="../../contact.php">需要幫助嗎?</a>
@@ -87,10 +86,10 @@
                                     <?php echo $_SESSION['seller_name']; ?>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="?logout=true">登出</a></li>
+                                    <li><a class="dropdown-item" href="../../index.php?logout=true">登出</a></li>
                                 </ul>
                             <?php } else { ?>
-                                <a class="nav-link" href="../seller_login.php">登入</a>
+                                <a class="nav-link" href="/seller/seller_login.php">登入</a>
                             <?php } ?>
                         </li>
 

@@ -1,7 +1,6 @@
 <?php
     session_start();
 
-    require_once("../method/bootstrap.html");
     require_once("../method/connet.php");
 
     function data_in($data) {
@@ -40,6 +39,8 @@
         header("Location:user_center.php");
         exit;
     }
+
+    require_once("../method/bootstrap.html");
 ?>
 
 <!DOCTYPE html>
@@ -93,7 +94,7 @@
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link " href="cart/cart.php">需要幫助嗎?</a>
+                            <a class="nav-link " href="../contact.php">需要幫助嗎?</a>
                         </li>
                        
                           <li class="nav-item dropdown">
@@ -102,10 +103,10 @@
                                     <?php echo $_SESSION['u_name']; ?>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="?logout=true">登出</a></li>
+                                    <li><a class="dropdown-item" href="../index.php?logout=true">登出</a></li>
                                 </ul>
                             <?php } else { ?>
-                                <a class="nav-link" href="user/user_login.php">登入</a>
+                                <a class="nav-link" href="/user/user_login.php">登入</a>
                             <?php } ?>
                         </li>
                     </ul>

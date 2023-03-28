@@ -20,13 +20,6 @@
         exit();
     }
 
-    if(isset($_GET['logout']) && ($_GET['logout'] == "true")){
-        unset($_SESSION['seller_name']);
-        unset($_SESSION['seller_id']);
-        header("Location:seller_login.php");
-        exit;
-    }
-
     require_once("../method/bootstrap.html");
 ?>
 
@@ -80,7 +73,7 @@
                                     <?php echo $_SESSION['seller_name']; ?>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="?logout=true">登出</a></li>
+                                    <li><a class="dropdown-item" href="../index.php?logout=true">登出</a></li>
                                 </ul>
                             <?php } else { ?>
                                 <a class="nav-link" href="seller_login.php">登入</a>

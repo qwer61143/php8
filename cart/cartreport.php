@@ -1,4 +1,6 @@
 <?php
+    ob_start();
+
     require_once("../method/class.Cart.php");
     require_once("../method/connet.php");
 
@@ -34,7 +36,19 @@
 
                 $insert = $conn -> prepare("INSERT INTO `order_item`(order_id, quantity, price, item_name, good_id) VALUES (?, ?, ?, ?, ?)");
                 $insert -> execute(array($order_id, $quantity, $item_price, $item_name, $good_id));
+
+                $query_sold = $conn -> prepare("SELECT good_sold FROM goods WHERE good_id = ?");
+                $query_sold -> execute(array($good_id));
+                $good_sold = $query_sold -> fetch(PDO::FETCH_ASSOC);
+                $good_total_sold = $good_sold['good_sold'] + $quantity;
+
+                $update = $conn -> prepare("UPDATE goods SET good_sold = ? WHERE good_id = ?");
+                $update -> execute(array($good_total_sold,$good_id));
             }
         }
     }
+    
+    ob_end_clean();
+    header("Location:../index.php");
+    exit;
 ?>
