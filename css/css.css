@@ -1,4 +1,336 @@
-.navbar {
-    font-size: 20px;
-    padding: 20px;
+@media (max-width: 768px) {
+
 }
+
+@media (min-width: 769px) {
+
+    /* navbar */
+
+        /* 上方navbar設定 */
+        
+            .custom-navbar-container{
+                height: 230px;
+            }
+
+            .navbar {
+                height: 80px;
+            }
+
+            .logo {
+                height: auto;
+                width: 100%;
+                object-fit: contain;
+            }
+
+            .navbar {
+                font-size: 26px;
+                padding: 30px;
+            }
+
+            .custom-dorpdown-toggle {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .custom-search-bar {
+                width: 70%;
+            }
+
+            .custom-navbar-search-form {
+                font-size: 26px;
+            }
+
+            .custom-navbar-item {
+                height: 100px;
+                width: 100px;
+            }
+
+            .custom-navbar-img {
+                height: 75px;
+                width: 75px;
+                object-fit: contain;
+            }
+
+        /* 下方設定(分類等) */
+
+            .custom-dropdown-toggle {
+                color: #ffffff; /* 您想要的顏色，這裡使用金色作為示例 */
+            }
+
+            .custom-nav-item {
+                color: #ffffff;
+            }
+
+    /* Breadcrumd */
+        
+        .breadcrumb-item {
+            font-size: 1.5em;
+        }
+
+        .custom-a {
+            text-decoration: none; /* 去除下划线 */
+            color: black; /* 设置颜色为黑色 */
+        }
+    
+    /* index.php card */
+
+        .custom-title {
+            font-size: 3em;
+        }
+
+        .custom-card {
+            align-self: start;
+            width: 220px;
+        }
+
+        .custom-img {
+            width: 200px; /* 設定圖片寬度為 200px */
+            height: 200px; /* 設定圖片高度為 200px */
+            object-fit: contain; /* 使圖片保持比例填充區域 */
+        }
+
+        .custom-card-body {
+            height: auto;
+        }
+
+        .card-text {
+            height: auto;
+        }
+
+        .custom-card-price {
+            font-size: 1.5em;
+        }
+
+    /* slick 輪播 */
+
+        .slick-prev,
+        .slick-next {
+            background-color: transparent !important;
+            font-size: 2em;
+        }
+
+    /* divider */
+
+        .divider-horizontal {
+            background-color: #2e2d2d;
+            width: 100%;
+            height: 2px;
+            opacity: 1;
+        }
+
+    /* 用戶/USER */
+
+        /* 用戶登入 */
+
+            .userlogin-logo {
+                width: 225px;
+                height: 225px;
+            }
+
+        /* 用戶中心 */
+            
+            .custom-usercenter-img {
+                width: 300px;
+                height: 300px;
+                object-fit: cover;
+            }
+
+            .user-center-title {
+                font-size: 3em;
+                letter-spacing: 0.05em;
+            }
+
+        /* 用戶註冊 */
+
+            .register-logo {
+                width: 512px;
+                height: 512px;
+                object-fit: contain;
+            }
+
+            .custom-img-size {
+                width: 225px ;
+                height: 225px;
+                object-fit: contain;
+            }
+
+            .error-message {
+                color: rgb(255, 0, 0);
+            }
+
+        /* 資料更新 */
+
+            .custom-profile-img {
+                width: 300px;
+                height: 300px;
+            }
+
+            .custom-form {
+                width: 300px;
+            }
+            
+            .user-profile-title {
+                font-size: 3em;
+                letter-spacing: 0.05em;
+            }
+
+    /* 賣家/seller */
+
+        /* 加入賣家 */
+            
+            .joinseller-logo {
+                width: 512px;
+                height: 512px;
+                object-fit: contain;
+            }
+
+        /* 賣家登入 */
+
+            .seller-logo {
+                width: 225px;
+                height: 225px;
+                object-fit: contain;
+            }
+
+        /* 賣家中心 */
+
+            .custom-seller-img {
+                width: 300px;
+                height: 300px;
+                object-fit: cover;
+            }
+
+            .seller-center-title {
+                font-size: 3em;
+                letter-spacing: 0.05em;
+            }
+
+        /* 商品上傳 */
+            
+            .add-good-logo {
+                width: 400px;
+                height: 400px;
+                object-fit: contain;
+            }
+
+        /* 賣家的商品列表 */
+
+            .custom-gdlist-img {
+                width: 100%; /* 設定圖片寬度為 100% */
+                height: 225px; /* 設定圖片高度為 200px */
+                object-fit: contain; /* 使圖片保持比例填充區域 */
+            }
+
+            .custom-gdlist-title {
+                font-size: 3em;
+            }
+
+            .custom-gdlist-price {
+                font-size: 2em;
+            }
+
+    /* 商品分類裡面的CSS */
+
+            .brand-container {
+                height: min-content;
+            }
+        
+            .brand-bg {
+                background-color: rgb(61, 55, 55);
+            }
+
+            .brand {
+                font-size: 2em;
+                color: #ffffff;
+                align-self: start;
+            }
+
+            .custom-category-card-img {
+                width: 200px; /* 設定圖片寬度為 200px */
+                height: 200px; /* 設定圖片高度為 200px */
+                object-fit: contain; /* 使圖片保持比例填充區域 */
+            }
+
+            .custom-category-card-title {
+                font-size: 1em;
+            }
+    
+            .custom-category-card {
+                align-self: start;
+                width: 200px;
+            }
+    
+            .custom-card-body {
+                height: auto;
+            }
+    
+            .card-text {
+                height: auto;
+            }
+
+            .custom-category-price {
+                font-size: 1.5em;
+            }
+    
+            .custom-card-price {
+                font-size: 1.5em;
+            }
+ 
+
+    /* 商品頁面CSS */
+
+        .good-img {
+            width: 600px;
+            height: 600px;
+            object-fit: contain;
+        }
+
+        .good-text-title {
+            font-size: 2.2em;
+        }
+
+        .good-text {
+            font-size: 1.5em;
+        }
+
+        /* 商品頁中賣家資訊 */
+
+            .custom-good-seller-img {
+                width: 125px; 
+                height: 125px; 
+                object-fit: contain;
+            }
+
+
+    /* 頁尾CSS */ 
+
+    .custom-footer {
+        background: rgba(42, 130, 231, 0.575);;
+    }
+
+    .footer-divider-horizontal {
+        background-color: #2e2d2d;
+        width: 100%;
+        height: 2px;
+        opacity: 1;
+    }
+
+    .custom-logo-image {
+        height: 300px;
+        width: 500px;
+        object-fit: contain;
+    }
+
+    .custom-footer-icon {
+        font-size: 4em;
+    }
+
+    .slogan-container {
+        padding: 15px;
+        text-align: center;
+    }
+
+}
+
+

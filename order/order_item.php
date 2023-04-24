@@ -14,9 +14,6 @@
     require_once("../method/bootstrap.html");
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
     <head>

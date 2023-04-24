@@ -1,186 +1,217 @@
 <?php
     session_start();
 
-    require_once("../../method/connet.php");
+    require_once "../../lib/Connect.php";
+    require_once "../../lib/Goods.php";
 
-    function data_in($data) {
-        $data = trim($data);
-        $data = stripcslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
+    if(!isset($_SESSION['seller_id'])){
+        header("Location: ../seller_login.php");
+        exit();
     }
 
-    $query = $conn -> prepare("SELECT * FROM `goods` WHERE good_id = :good_id");
-    $query -> bindParam(':good_id', $_GET['gid'], PDO::PARAM_INT);
-    $query -> execute();
-    $result = $query -> fetch(PDO::FETCH_ASSOC);
+    if(isset($_GET['gid']) && $_GET['gid'] != "") {
 
-    if(isset($_POST['action']) && ($_POST['action'] == "update")){
+        $db = new Connect;
+        $conn = $db->getConnect();
 
-        $good_name = data_in($_POST['good_name']);
-        $good_price = data_in($_POST['good_price']);
-        $good_total = data_in($_POST['good_total']);
-        $good_info = data_in($_POST['good_info']);
-        $good_id = data_in($_GET['gid']);
-    
-        if(!empty($_FILES['good_pic']['name']) && $_FILES['good_pic']['error'] === UPLOAD_ERR_OK){
+        $query = $conn->prepare("SELECT * FROM `goods` WHERE good_id = :good_id");
+        $query->bindParam(':good_id', $_GET['gid'], PDO::PARAM_INT);
+        $query->execute();
+        $result = $query->fetch(PDO::FETCH_ASSOC);
 
-            if($_FILES['good_pic']['size']>10485760){
-                echo $_FILES['good_pic']['error'];
-            }else {
+        if($_SERVER['REQUEST_METHOD'] == "POST") {
 
-                $image = $_FILES['good_pic']['tmp_name'];
-                $handle = fopen($image,"rb");
-                $image = base64_encode(fread($handle,filesize($image)));
-                $curl_post = array('image' => $image , 'title' => $good_name);
+            $good_pic = "";
 
-                $curl = curl_init();
-                curl_setopt($curl, CURLOPT_URL, 'https://api.imgur.com/3/image');
-                curl_setopt($curl, CURLOPT_TIMEOUT , '30');
-                curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Client-ID ' . "c5f40afed18aaa5"));
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
-                //curl_setopt($curl,CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $curl_post );
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 'true');
+            if(isset($_FILES['good_pic'])) {
+                if($_FILES['good_pic']['error'] === UPLOAD_ERR_OK) {
+                    if($_FILES['good_pic']['size']>10485760) {
+                        $errors['good_pic'] = "照片過大，只能上傳10Mb以下圖片";
+                    }else {
+                        $image = $_FILES['good_pic']['tmp_name'];
+                        $handle = fopen($image,"rb");
+                        $image = base64_encode(fread($handle,filesize($image)));
+                        $curl_post = array('image' => $image , 'title' => $_POST['good_name']);
 
-                $curl_result = curl_exec($curl);
-                curl_close($curl);
-                $img_result = json_decode($curl_result, true);
+                        $curl = curl_init();
+                        curl_setopt($curl, CURLOPT_URL, 'https://api.imgur.com/3/image');
+                        curl_setopt($curl, CURLOPT_TIMEOUT , '30');
+                        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Client-ID ' . "c5f40afed18aaa5"));
+                        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+                        //curl_setopt($curl,CURLOPT_SSL_VERIFYPEER, false);
+                        curl_setopt($curl, CURLOPT_POSTFIELDS, $curl_post );
+                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 'true');
 
-                if($img_result['success'] == 'true'){
-                    $good_pic = $img_result['data']['link'];
+                        $curl_result = curl_exec($curl);
+                        curl_close($curl);
+                        $result = json_decode($curl_result, true);
+
+                        if($result['success'] == 'true'){
+                            $good_pic = $result['data']['link'];
+                        }else {
+                            echo $result['status'];
+                        }
+                    }
                 }else {
-                    echo $img_result['status'];
+                    // echo "檔案錯誤代碼".$_FILES['good_pic']['error'];
                 }
             }
-        }else {
-            $good_pic = $result['good_pic'];
-            if ($_FILES['good_pic']['error'] != UPLOAD_ERR_NO_FILE) {
-                echo "檔案錯誤代碼" . $_FILES['good_pic']['error'];
+
+            $good = [
+                'good_name' => $_POST['good_name'],
+                'good_pic' => $good_pic,
+                'good_price' =>$_POST['good_price'],
+                'good_total' => $_POST['good_total'],
+                'good_info' => $_POST['good_info'],
+                'good_category' => $_POST['good_category'],
+                'good_subcategory' => $_POST['good_subcategory'],
+                'good_brand' => $_POST['good_brand'],
+                'good_seller' => $_SESSION['seller_id']
+            ];
+
+            $good_data = new Good($conn);
+            $good_data->setGoodData($good);
+            $errors = $good_data->validateGoodsData();
+
+            if(empty($errors)) {
+                $insert = $conn->prepare("INSERT INTO `goods`(good_name, good_pic, good_price, good_total, good_info, good_category , good_subcategory, good_brand, good_uptime, good_seller) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
+                $insert -> execute(array_values($good));
+                $good_id = $conn -> lastInsertId();
+
+                $update = $conn -> prepare("UPDATE `seller` SET goods = CONCAT(goods, ',', :good_id) WHERE seller_id = :seller_id");
+                $update -> bindParam(':good_id', $good_id, PDO::PARAM_INT);
+                $update -> bindParam(':seller_id', $good['good_seller'] ,PDO::PARAM_INT);
+                $update -> execute();
+
+                $success = "上傳成功!";
+            }else {
+                $upload_failed = "上傳失敗!";
             }
         }
+    }
 
-        $update = $conn -> prepare("UPDATE `goods` SET good_name= ?, good_pic= ?, good_price= ?, good_total= ?, good_info= ? WHERE good_id =?");
-        $update -> execute(array($good_name,$good_pic,$good_price,$good_total,$good_info,$good_id));
-
-        header("Location: good_update.php?gid=" . $good_id);
-        exit;
-        }
-    
-    require_once("../../method/bootstrap.html");
+    require_once "../../method/SweetAlert2.html";
+    require_once "../../method/bootstrap.html";
 ?>
-
 <!DOCTYPE html>
 <html lang="zh-TW">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../../css/css.css" type="text/css">
-        <style>
-        .centered-form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .image-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
-        .image-container img {
-            max-width: 40vw;
-            max-height: 40vw;
-            width: auto;
-            height: auto;
-        }
-        </style>
-        <title>商品更新</title>
+        <title>商品上傳</title>
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3 position-relative">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="../../index.php">InsideTech</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="../../index.php">主頁</a>
-                            </li>
+    
+        <?php
+            require_once "../../view/navbar.php";
+        ?>
+        
+        <div class="text-center seller-center-title mt-5"><?php echo $result['good_name'] ?></div>
 
-                            <li class="nav-item">
-                            <a class="nav-link" href="/seller/seller_center.php">賣家中心</a>
-                            </li>
+        <div class="container">
+            <div class="row">
+                <div class="col-6 d-flex justify-content-center align-items-center">
+                    <img src="<?php echo $result['good_pic'] ?>" alt="addgood" title="上傳商品" class="add-good-logo mt-5">
+                </div>
+                <div class="col-6">
+                    <div class="d-flex flex-column justify-content-center text-center mt-5">
+                        <form class="" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="good_name">商品名稱</label>
+                                <input type="text" class="form-control" id="good_name" name="good_name" value="<?php echo $result['good_name']?>">
+                            </div>
+                            <div class="error-message"> 
+                                <?php if(isset($errors) && !empty($errors['good_name'])) { echo $errors['good_name'];} ?>
+                            </div>
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">更改語言</a>                
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">繁體中文</a></li>
-                                    <li><a class="dropdown-item" href="#">英文</a></li>
-                                    <li>
-                                    <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="#">更多</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <a class="nav-link " href="../../contact.php">需要幫助嗎?</a>
-                            </li>
-                        
-                            <li class="nav-item dropdown">
-                            <?php if (isset($_SESSION['seller_name']) && $_SESSION['seller_name'] != "") { ?>
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <?php echo $_SESSION['seller_name']; ?>
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="../../index.php?logout=true">登出</a></li>
-                                </ul>
-                            <?php } else { ?>
-                                <a class="nav-link" href="/seller/seller_login.php">登入</a>
-                            <?php } ?>
-                        </li>
+                            <div class="form-group">
+                                <label for="good_pic">商品圖片</label>
+                                <input type="file" class="form-control" id="good_pic" name="good_pic" value="<?php echo $result['good_pic']?>">
+                            </div>
+                            <div class="error-message"> 
+                                <?php if(isset($errors) && !empty($errors['good_pic'])) { echo $errors['good_pic'];} ?>
+                            </div>
 
-                    </ul>
+                            <div class="form-group">
+                                <label for="good_price">商品價格</label>
+                                <input type="number" class="form-control" id="good_price" name="good_price" value="<?php echo $result['good_price']?>">
+                            </div>
+                            <div class="error-message"> 
+                                <?php if(isset($errors) && !empty($errors['good_price'])) { echo $errors['good_price'];} ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="good_total">商品數量</label>
+                                <input type="number" class="form-control" id="good_total" name="good_total" value="<?php echo $result['good_total']?>">
+                            </div>
+                            <div class="error-message"> 
+                                <?php if(isset($errors) && !empty($errors['good_total'])) { echo $errors['good_total'];} ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="good_info">商品描述</label>
+                                <input type="text" class="form-control" id="good_info" name="good_info" value="<?php echo $result['good_info']?>">
+                            </div>
+                            <div class="error-message"> 
+                                <?php if(isset($errors) && !empty($errors['good_info'])) { echo $errors['good_info'];} ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="good_category">商品分類</label>
+                                <input type="text" class="form-control" id="good_category" name="good_category" value="<?php echo $result['good_category']?>">
+                            </div>
+                            <div class="error-message"> 
+                                <?php if(isset($errors) && !empty($errors['good_category'])) { echo $errors['good_category'];} ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="good_subcategory">商品副分類</label>
+                                <input type="text" class="form-control" id="good_subcategory" name="good_subcategory" value="<?php echo $result['good_subcategory']?>">
+                            </div>
+                            <div class="error-message"> 
+                                <?php if(isset($errors) && !empty($errors['good_subcategory'])) { echo $errors['good_subcategory'];} ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="good_brand">商品品牌</label>
+                                <input type="text" class="form-control" id="good_brand" name="good_brand" value="<?php echo $result['good_brand']?>">
+                            </div>
+                                <div class="error-message"> 
+                                    <?php if(isset($errors) && !empty($errors['good_brand'])) { echo $errors['good_brand'];} ?>
+                                </div>
+                            <button type="submit" class="btn btn-primary mt-3">上傳</button>
+                                <div class="error-message"> 
+                                    <?php if(isset($errors) && !empty($errors['good_brand'])) { echo $errors['good_brand'];} ?>
+                                </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </nav>
-
-        <div class="centered-form">
-            <form class="w-50" method="POST" action="" enctype="multipart/form-data">
-                <div class="text-center  mb-5">
-                    <span><?php echo $result['good_name']?></span>
-                </div>
-                <div class="image-container mb-5">
-                    <img src="<?php echo $result['good_pic'] ?>">
-                </div>
-                <div class="form-group">
-                    <label for="good_name">商品名稱</label>
-                    <input type="text" class="form-control" id="good_name" name="good_name" value="<?php echo $result['good_name']?>">
-                </div>
-                <div class="form-group">
-                    <label for="good_pic">商品圖片</label>
-                    <input type="file" class="form-control" id="good_pic" name="good_pic" value="<?php echo $result['good_pic'] ?>">
-                </div>
-                <div class="form-group">
-                    <label for="good_price">商品價格</label>
-                    <input type="number" class="form-control" id="good_price" name="good_price" value="<?php echo $result['good_price']?>">
-                </div>
-                <div class="form-group">
-                    <label for="good_total">商品數量</label>
-                    <input type="number" class="form-control" id="input4" name="good_total" value="<?php echo $result['good_total']?>">
-                </div>
-                <div class="form-group">
-                    <label for="good_info">商品描述</label>
-                    <input type="text" class="form-control" id="good_info" name="good_info" value="<?php echo $result['good_info'] ?>">
-                </div>
-                <input type="hidden" name="action" value="update">
-                <button type="submit" class="btn btn-primary">更新</button>
-            </form>
         </div>
+  
+        <?php
+            require_once "../../view/footer.php"
+        ?>
+
+        <?php if(isset($success) && $success != ""): ?>
+            <script>
+                // 顯示成功消息
+                Swal.fire(
+                    '商品更新成功!',
+                )
+            </script>
+        <?php endif; ?>
+
+        <?php if(isset($upload_failed) && $upload_failed != ""): ?>
+            <script>
+                // 顯示成功消息
+                Swal.fire({
+                    icon: 'error',
+                    title: '更新失敗!',
+                })
+            </script>
+        <?php endif; ?>
+
     </body>
 </html>
